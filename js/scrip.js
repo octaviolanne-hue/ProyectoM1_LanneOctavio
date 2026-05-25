@@ -2,14 +2,35 @@ const container = document.querySelector(".container");
 
 const btnCambiar = document.getElementById("btnColor");
 
+const mensajeCopiado =
+  document.getElementById("copiado");
+
 const botonesCantidad =
   document.querySelectorAll("[data-cantidad]");
 
 let cantidadActual = 6;
 
+let modoActual = "hsl";
+
+const botonesModo =
+  document.querySelectorAll("[data-modo]");
+
 
 
 crearBoxes(cantidadActual);
+
+botonesModo.forEach(boton => {
+
+  boton.addEventListener("click", () => {
+
+    modoActual =
+      boton.dataset.modo;
+
+    cambiarColores();
+
+  });
+
+});
 
 
 
@@ -38,11 +59,25 @@ function crearBoxes(cantidad) {
 
   for (let i = 0; i < cantidad; i++) {
 
+    const item = document.createElement("div");
+
+    item.classList.add("color-item");
+
     const box = document.createElement("div");
 
     box.classList.add("box");
 
-    container.appendChild(box);
+    const code = document.createElement("p");
+
+    code.classList.add("color-code");
+
+    code.addEventListener("click", copiarCodigo);
+
+    item.appendChild(box);
+
+    item.appendChild(code);
+
+    container.appendChild(item);
 
   }
 
@@ -50,27 +85,166 @@ function crearBoxes(cantidad) {
 
 }
 
+function copiarCodigo(event) {
 
+  const texto =
+    event.target.textContent;
+
+
+  navigator.clipboard.writeText(texto);
+
+
+  mensajeCopiado.classList.add("mostrar");
+
+
+  setTimeout(() => {
+
+    mensajeCopiado.classList.remove("mostrar");
+
+  }, 1500);
+
+}
 
 function cambiarColores() {
 
-  const boxes =
-    document.querySelectorAll(".box");
+  const items =
+    document.querySelectorAll(".color-item");
 
   const inicio =
     Math.floor(Math.random() * 360);
 
   const separacion =
-    360 / boxes.length;
+    360 / items.length;
 
-  boxes.forEach((box, index) => {
+  items.forEach((item, index) => {
+
+    const box =
+      item.querySelector(".box");
+
+    const code =
+      item.querySelector(".color-code");
+
 
     const hue =
       (inicio + separacion * index) % 360;
 
-    box.style.backgroundColor =
-      `hsl(${hue}, 80%, 50%)`;
+
+    let color = "";
+
+    let hex = "";
+
+
+
+    if (modoActual === "hsl") {
+
+      color =
+        `hsl(${hue}, 80%, 50%)`;
+
+      hex =
+        hslToHex(hue, 80, 50);
+
+    }
+
+    else {
+
+      const r =
+        Math.floor(Math.random() * 256);
+
+      const g =
+        Math.floor(Math.random() * 256);
+
+      const b =
+        Math.floor(Math.random() * 256);
+
+      const a =
+        Math.random().toFixed(2);
+
+
+      color =
+        `rgba(${r}, ${g}, ${b}, ${a})`;
+
+
+      hex =
+        rgbToHex(r, g, b);
+
+}
+
+
+
+box.style.backgroundColor = color;
+
+code.textContent = hex;
 
   });
+
+}
+
+function hslToHex(h, s, l) {
+
+  s /= 100;
+  l /= 100;
+
+  const c =
+    (1 - Math.abs(2 * l - 1)) * s;
+
+  const x =
+    c * (1 - Math.abs((h / 60) % 2 - 1));
+
+  const m = l - c / 2;
+
+  let r = 0;
+  let g = 0;
+  let b = 0;
+
+  if (h < 60) {
+    r = c;
+    g = x;
+  }
+
+  else if (h < 120) {
+    r = x;
+    g = c;
+  }
+
+  else if (h < 180) {
+    g = c;
+    b = x;
+  }
+
+  else if (h < 240) {
+    g = x;
+    b = c;
+  }
+
+  else if (h < 300) {
+    r = x;
+    b = c;
+  }
+
+  else {
+    r = c;
+    b = x;
+  }
+
+  r = Math.round((r + m) * 255);
+  g = Math.round((g + m) * 255);
+  b = Math.round((b + m) * 255);
+
+  return "#" +
+    r.toString(16).padStart(2, "0") +
+    g.toString(16).padStart(2, "0") +
+    b.toString(16).padStart(2, "0");
+
+}
+
+function rgbToHex(r, g, b) {
+
+  return "#" +
+
+    r.toString(16).padStart(2, "0") +
+
+    g.toString(16).padStart(2, "0") +
+
+    b.toString(16).padStart(2, "0");
 
 }
