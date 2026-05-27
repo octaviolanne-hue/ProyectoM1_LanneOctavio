@@ -273,16 +273,17 @@ if (modoActual === "hsl") {
 else {
 
   const r =
-    Math.floor(Math.random() * 256);
+    Math.floor(Math.random() * 156) + 100;
 
   const g =
-    Math.floor(Math.random() * 256);
+    Math.floor(Math.random() * 156) + 100;
 
   const b =
-    Math.floor(Math.random() * 256);
+    Math.floor(Math.random() * 156) + 100;
 
   const a =
-    Math.random().toFixed(2);
+    (Math.random() * 0.4 + 0.6)
+      .toFixed(2);
 
 
   color =
