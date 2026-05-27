@@ -61,6 +61,7 @@ cd ProyectoM1_LanneOctavio
 Abrir el archivo index.html en el navegador.
 
 También se recomienda usar la extensión Live Server en Visual Studio Code para una mejor experiencia de desarrollo.
+```
 
 ## LINK
 
@@ -70,4 +71,3 @@ https://octaviolanne-hue.github.io/ProyectoM1_LanneOctavio/
 
 Lanne Octavio Gaston
 Full Stack · Henry Full Stack FT75 · Mayo 2026
-```
